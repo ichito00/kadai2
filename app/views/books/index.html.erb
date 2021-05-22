@@ -1,3 +1,8 @@
+<% if flash[:notice] %>
+  <p><%= flash[:notice] %></p>
+<% end %>
+
+
 
 <h1>Books</h1>
 
@@ -6,19 +11,22 @@
     <tr>
       <th>Title</th>
       <th>Body</th>
-      <th colspaan="3"></th>
+
     </tr>
   </thead>
   <tbody>
-    <% @books.each do |book| %>
-    <tr>
-      <td><%= book.title %></td>
-      <td><%= book.body %></td>
-      <td class="show"><%= link_to "Show",book_path(book) %></td>
-      <td class="show"><%= link_to"Edit",edit_book_path(book) %></td>
-      <td class="show"><%= link_to"Destroy",book,method: :delete,date:{confirm:"Are you sure?"} %></td>
-    </tr>
-    <% end %>
+
+      <% @books.each do |book| %>
+
+        <tr>
+          <td><%= book.title %></td>
+          <td><%= book.body %></td>
+          <td><%= link_to "Show",book_path(book) %></td>
+          <td><%= link_to"Edit",edit_book_path(book) %></td>
+          <td><%= link_to"Destroy",book,method: :delete,date:{confirm:"Are you sure?"} %></td>
+      </tr>
+      <% end %>
+
   </tbody>
 </table>
 
@@ -29,17 +37,27 @@
 
 <h2>New Book</h2>
 
-<%= form_with model:@book, url:'/books', local:true do |f| %>
 
-<div class="field">
-  <h4>Title</h4>
-  <%= f.text_field :title %>
-</div>
-<div class="field">
-  <h4>Body</h4>
-  <%= f.text_area :body %>
-</div>
-<div>
-  <%= f.submit 'Create Book' %>
-</div>
-<% end %>
+
+        <% if @book.errors.any? %>
+          <h4><%= @book.errors.count %>errors prohibited this book from being saved:</h4>
+          <ul>
+            <% @book.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+            <% end %>
+          </ul>
+        <% end %>
+
+
+
+  <%= form_with model:@book, local:true do |f| %>
+      <h4>Title</h4>
+      <%= f.text_field :title %>
+
+      <h4>Body</h4>
+      <%= f.text_area :body %>
+      <br>
+
+      <%= f.submit 'Create Book' %>
+　<% end%>
+
